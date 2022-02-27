@@ -1,0 +1,52 @@
+{
+    "title": "Input schema for the hello_word actor.",
+    "type": "object",
+    "schemaVersion": 1,
+    "properties": {
+        "testProxies": {
+            "title": "Test Proxies?",
+            "type": "boolean",
+            "description": "Run the tests, or no? If no, the other fields will have no effect.",
+            "default": true,
+            "editor": "checkbox",
+            "sectionCaption": "Proxy Tests",
+            "sectionDescription": "Settings for testing the proxies"
+        },
+        "testTarget": {
+            "title": "Test Target",
+            "type": "string",
+            "description": "Target website to run all of the tests on.",
+            "editor": "textfield"
+        },
+        "testTimeout": {
+            "title": "Test Timeout",
+            "type": "integer",
+            "description": "The max timeout for every single test request. If the request takes longer than this, the proxy will be trashed.",
+            "minimum": 1,
+            "maximum": 30,
+            "editor": "number"
+        },
+        "datasetName": {
+            "title": "Dataset Name",
+            "type": "string",
+            "description": "Custom dataset name to use instead of the default one.",
+            "editor": "textfield",
+            "sectionCaption": "Storages",
+            "sectionDescription": "Storage settings"
+        },
+        "pushToKvStore": {
+            "title": "Push to key-value-store?",
+            "type": "boolean",
+            "description": "Push JSON and .TXT format of the data to the key-value store with a default name of \"free-proxy-store\".",
+            "default": false,
+            "editor": "checkbox"
+        },
+        "kvStoreName": {
+            "title": "Key-Value-Store Name",
+            "type": "string",
+            "description": "Custom key-value store name to use instead of \"free-proxy-store\".",
+            "editor": "textfield"
+        }
+    },
+    "required": []
+}

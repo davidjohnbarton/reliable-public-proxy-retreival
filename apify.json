@@ -1,0 +1,9 @@
+{
+    "name": "proxy-scraper",
+    "version": "0.2",
+    "buildTag": "beta",
+    "env": {
+        "APIFY_MEMORY_MBYTES": "2048"
+    },
+    "template": "example_typescript"
+}
