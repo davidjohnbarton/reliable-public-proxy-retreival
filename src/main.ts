@@ -4,7 +4,7 @@ import axios from 'axios';
 
 import GlobalStore from './globalStore';
 
-import { Schema, ProxySchema } from './types';
+import { Schema, ProxySchema, State } from './types';
 import { LABELS, REQUESTS, prepareRequestList } from './consts';
 import { getProxiesFromTable, addProxiesToStore, testProxy, proxyLog, getProxiesFromSneakyTable } from './utils';
 
@@ -16,7 +16,7 @@ Apify.main(async () => {
 
     const {
         testProxies = true,
-        testTimeout = 6.5,
+        testTimeout = 15,
         testTarget = `https://google.com`,
         datasetName,
         kvStoreName = 'free-proxy-store',
@@ -212,10 +212,23 @@ Apify.main(async () => {
     await crawler.run();
     log.info('Crawler finished.');
 
+    // Remove duplicates
+    Store.setState((prev: State) => {
+        const prevProxies = prev.proxies as ProxySchema[];
+        return {
+            ...prev,
+            proxies: [
+                ...prevProxies.filter((val, i, self) => {
+                    return i === self.findIndex((obj) => obj.full === val.full);
+                }),
+            ],
+        };
+    });
+
     proxyLog.log(`Retrieved ${Store.getState().proxies.length} proxies.`);
 
     if (!testProxies) {
-        proxyLog.log('Not testing proxies. Pushing to dataset.');
+        proxyLog.log('Not testing proxies. Pushing to default dataset.');
         proxyLog.warn('It is highly recommended to set "testProxies" to be "true"');
         return await Apify.pushData(Store.getState().proxies);
     }
@@ -259,18 +272,16 @@ Apify.main(async () => {
         return proxies;
     })();
 
-    const noDuplicates = newProxies.filter((val, i, self) => {
-        return i === self.findIndex((obj) => obj.full === val.full);
-    });
-
-    proxyLog.storages(`${noDuplicates.length} reliable proxies retrieved. Pushing to named Key-Value store...`);
+    proxyLog.storages(`${newProxies.length} reliable proxies retrieved.`);
 
     if (kvStore) {
         // Save JSON format to kvStore
-        await kvStore.setValue('current-proxies', noDuplicates);
+        proxyLog.storages(`Pushing proxy data (JSON and TXT) to the named Key-Value store: ${kvStoreName}`);
+
+        await kvStore.setValue('current-proxies', newProxies);
 
         let plainText = ``;
-        noDuplicates.forEach(({ full }) => {
+        newProxies.forEach(({ full }) => {
             plainText += `${full}\n`;
         });
 
@@ -278,12 +289,12 @@ Apify.main(async () => {
         await kvStore.setValue('current-proxies-txt', plainText, { contentType: 'text/plain' });
     }
 
-    proxyLog.storages(`Pushing to dataset...`);
-
     if (namedDataset) {
-        await namedDataset.pushData(noDuplicates);
+        proxyLog.storages(`Pushing to named dataset: ${datasetName}`);
+        await namedDataset.pushData(newProxies);
     } else {
-        await Apify.pushData(noDuplicates);
+        proxyLog.storages(`Pushing to default dataset...`);
+        await Apify.pushData(newProxies);
     }
 
     log.info('Done.');
