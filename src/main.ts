@@ -58,7 +58,7 @@ Apify.main(async () => {
         autoscaledPoolOptions: {
             desiredConcurrency: 10,
         },
-        handlePageFunction: async ({ $, request, json, body }) => {
+        handlePageFunction: async ({ $, request, json, body, crawler: { requestQueue: rq } }) => {
             switch (request.userData.label) {
                 default:
                     break;
@@ -130,9 +130,22 @@ Apify.main(async () => {
                     break;
 
                 case LABELS.FREEPROXYLISTCOM:
+                    const rows = $('.proxy-list tbody > tr');
+                    if (!rows.length) return;
+
                     const freeProxyListComPrx = getProxiesFromTable($, '.proxy-list tbody > tr', 0, 2);
 
                     addProxiesToStore(Store, freeProxyListComPrx);
+
+                    const url = new URL(request.url);
+                    const currentPage = url.searchParams.get('page');
+
+                    if (currentPage) {
+                        url.searchParams.set('page', `${+currentPage + 1}`);
+
+                        await rq?.addRequest({ url: url.toString() });
+                    }
+
                     break;
 
                 case LABELS.ANONYMOUSE:

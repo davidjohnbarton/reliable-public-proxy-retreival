@@ -64,7 +64,7 @@ export const REQUESTS: RequestOptions[] = [
         userData: { label: LABELS.PROXYNOVA },
     },
     {
-        url: 'https://free-proxy-list.com/?page=&port=&up_time=90&search=Search',
+        url: 'https://free-proxy-list.com/?page=1&port=&up_time=90&search=Search',
         userData: { label: LABELS.FREEPROXYLISTCOM },
     },
     {
