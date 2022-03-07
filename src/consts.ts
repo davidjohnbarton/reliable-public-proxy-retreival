@@ -56,7 +56,7 @@ export const REQUESTS: RequestOptions[] = [
         userData: { label: LABELS.VPNOVERVIEW },
     },
     {
-        url: 'https://hidemy.name/en/proxy-list/?maxtime=5000&anon=34#list',
+        url: 'https://hidemy.name/en/proxy-list/?maxtime=2000&anon=34#list',
         userData: { label: LABELS.HIDEMYNAME },
     },
     {
@@ -64,7 +64,7 @@ export const REQUESTS: RequestOptions[] = [
         userData: { label: LABELS.PROXYNOVA },
     },
     {
-        url: 'https://free-proxy-list.com/?page=&port=&up_time=50&search=Search',
+        url: 'https://free-proxy-list.com/?page=&port=&up_time=90&search=Search',
         userData: { label: LABELS.FREEPROXYLISTCOM },
     },
     {
@@ -76,7 +76,7 @@ export const REQUESTS: RequestOptions[] = [
         userData: { label: LABELS.CODERDUCK },
     },
     {
-        url: 'https://proxyfinder.proxyrack.com/proxies.json?perPage=15000&offset=0',
+        url: 'https://proxyfinder.proxyrack.com/proxies.json?perPage=16000&offset=0',
         userData: { label: LABELS.PROXYFINDER },
         headers: {
             Origin: 'https://www.proxyrack.com',
@@ -89,10 +89,14 @@ export const REQUESTS: RequestOptions[] = [
         url: 'https://www.proxy-list.download/api/v1/get?type=http&anon=elite&country=US',
         userData: { label: LABELS.PROXYLISTDOWNLOAD },
     },
+    {
+        url: 'https://www.proxy-list.download/api/v1/get?type=http&anon=transparent&country=US',
+        userData: { label: LABELS.PROXYLISTDOWNLOAD },
+    },
 ];
 
 export const prepareRequestList = () => {
-    for (let i = 0; i < 50; i++) {
+    for (let i = 0; i < 60; i++) {
         REQUESTS.unshift({
             url: 'https://www.proxyscan.io/api/proxy?uptime=90&limit=10',
             userData: { label: LABELS.PROXYSCANIO },
