@@ -16,7 +16,7 @@ Apify.main(async () => {
 
     const {
         testProxies = true,
-        testTimeout = 6500,
+        testTimeout = 6.5,
         testTarget = `https://google.com`,
         datasetName,
         kvStoreName = 'free-proxy-store',
