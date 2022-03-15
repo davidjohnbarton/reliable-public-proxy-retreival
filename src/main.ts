@@ -38,10 +38,7 @@ Apify.main(async () => {
     prepareRequestList();
     const requestList = await Apify.openRequestList('urls', REQUESTS);
     const requestQueue = await Apify.openRequestQueue();
-    const proxyConfiguration = await Apify.createProxyConfiguration({
-        groups: ['SHADER'],
-        countryCode: 'US',
-    });
+    const proxyConfiguration = await Apify.createProxyConfiguration();
 
     Store.setState({ proxies: [] });
 
@@ -243,7 +240,7 @@ Apify.main(async () => {
     if (!testProxies) {
         proxyLog.log('Not testing proxies. Pushing to default dataset.');
         proxyLog.warn('It is highly recommended to set "testProxies" to be "true"');
-        return await Apify.pushData(Store.getState().proxies);
+        return Apify.pushData(Store.getState().proxies);
     }
 
     proxyLog.log(`Now testing all proxies with target ${testTarget} and timeout of ${testTimeout * 1000}ms`);
@@ -253,7 +250,7 @@ Apify.main(async () => {
             timeout: testTimeout * 1000,
         });
 
-        let proxies = Store.state.proxies;
+        let { proxies } = Store.state;
 
         const promises = [];
         for (const proxy of proxies) {
