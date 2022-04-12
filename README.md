@@ -1,5 +1,7 @@
 # Proxy Scraper
 
+## What is Proxy Scraper?
+
 This very simple and performant actor scours various different free-proxy websites and scrapes all of them. Then, optionally, it can test each of those proxies for you on a specified target and timeout, then only return back the proxies which pass the test.
 
 ## Input
