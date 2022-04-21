@@ -1,7 +1,13 @@
 **Why use Proxy Scraper?**
 There are many free public proxies available for use, such as [Geonode](https://geonode.com/free-proxy-list/) and [free-proxy-list.net](https://free-proxy-list.net/). All proxies from these sites have varying degrees of quality, speed, and security. Some of them are painfully slow; others don't work at all.
 
+
+## What is Proxy Scraper?
+
+This very simple and performant actor scours various different free-proxy websites and scrapes all of them. Then, optionally, it can test each of those proxies for you on a specified target and timeout, then only return back the proxies which pass the test.
+=======
 Proxy Scraper is a free public actor on the Apify platform which takes these issues into account. Proxy Scraper is the best way to quickly obtain a list of working public proxies with a straightforward configuration process, fast runtimes, and reliable outputs.
+
 
 **What does Proxy Scraper do?**
 Proxy Scraper performs two key tasks in every run:
