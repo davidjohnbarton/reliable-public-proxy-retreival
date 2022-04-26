@@ -96,7 +96,7 @@ export const REQUESTS: RequestOptions[] = [
 ];
 
 export const prepareRequestList = () => {
-    for (let i = 0; i < 60; i++) {
+    for (let i = 0; i < 70; i++) {
         REQUESTS.unshift({
             url: 'https://www.proxyscan.io/api/proxy?uptime=90&limit=10',
             userData: { label: LABELS.PROXYSCANIO },

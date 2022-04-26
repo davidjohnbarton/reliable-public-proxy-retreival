@@ -19,15 +19,15 @@ class GlobalStore {
 
     async initialize(): Promise<void> {
         const data = await Apify.getValue('GLOBAL-STORE');
-        if (!!data) this.state = data as State;
+        if (data) this.state = data as State;
         if (!data) this.state = {};
     }
 
-    getState() {
+    getState(): State {
         return this.state as State;
     }
 
-    setState(setStateParam: State | SetStateFunctionCallBack) {
+    setState(setStateParam: State | SetStateFunctionCallBack): void {
         if (typeof setStateParam === 'object') {
             this.state = setStateParam;
             return;

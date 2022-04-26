@@ -1,19 +1,20 @@
 import { AxiosInstance, AxiosProxyConfig } from 'axios';
 import { CheerioAPI } from 'cheerio';
 import { color } from 'console-log-colors';
-const { red, cyan, green, yellow, blueBright } = color;
 
 import GlobalStore from './globalStore';
 import { ProxySchema, StateWithProxies } from './types';
 
+const { red, cyan, green, yellow, blueBright } = color;
+
 export const proxyLog = {
     test: {
-        success: (str: string) => console.log(cyan('[PROXY TESTS]'), green(str)),
-        failure: (str: string) => console.log(cyan('[PROXY TESTS]'), red(str)),
+        success: (str: string): void => console.log(cyan('[PROXY TESTS]'), green(str)),
+        failure: (str: string): void => console.log(cyan('[PROXY TESTS]'), red(str)),
     },
-    log: (str: string) => console.log(cyan('[PROXY SCRAPER]'), str),
-    warn: (str: string) => console.log(cyan('[PROXY SCRAPER]'), yellow(str)),
-    storages: (str: string) => console.log(blueBright('[STORAGES]'), str),
+    log: (str: string): void => console.log(cyan('[PROXY SCRAPER]'), str),
+    warn: (str: string): void => console.log(cyan('[PROXY SCRAPER]'), yellow(str)),
+    storages: (str: string): void => console.log(blueBright('[STORAGES]'), str),
 };
 
 export const getProxiesFromTable = ($: CheerioAPI, tableRowSelector: string, hostPosition = 0, portPosition = 1): Array<ProxySchema> => {
@@ -55,7 +56,7 @@ export const getProxiesFromSneakyTable = ($: CheerioAPI, tableRowSelector: strin
         tds.each((i, td) => {
             if (i === 0) {
                 const scriptTag = $(td).find('abbr > script').html() as string;
-                host = !!scriptTag ? scriptTag.replace(/document.write|'|\+|\)|\(|\s|;/g, '') : null;
+                host = scriptTag ? scriptTag.replace(/document.write|'|\+|\)|\(|\s|;/g, '') : null;
             }
             if (i === 1) port = $(td).text().trim();
             if (i > 1) full = `${host}:${port}`;

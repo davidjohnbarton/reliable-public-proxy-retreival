@@ -60,13 +60,14 @@ Apify.main(async () => {
                 default:
                     break;
 
-                case LABELS.FREEPROXYLISTNET:
+                case LABELS.FREEPROXYLISTNET: {
                     const freeProxiesPrx = getProxiesFromTable($, '.fpl-list tbody > tr');
 
                     addProxiesToStore(Store, freeProxiesPrx);
                     break;
+                }
 
-                case LABELS.GEONODECOM:
+                case LABELS.GEONODECOM: {
                     const { data }: { data: { ip: string; port: string }[] } = json;
                     const geonodePrx = data.map(({ ip, port }) => {
                         return {
@@ -78,8 +79,9 @@ Apify.main(async () => {
 
                     addProxiesToStore(Store, geonodePrx);
                     break;
+                }
 
-                case LABELS.SPYSME:
+                case LABELS.SPYSME: {
                     const string = Buffer.from(body).toString();
                     let arr = string.split('\n').slice(6);
                     arr = arr.slice(6, arr.length - 2).map((item) => item.split(' ')[0]);
@@ -93,8 +95,9 @@ Apify.main(async () => {
 
                     addProxiesToStore(Store, spysMePrx);
                     break;
+                }
 
-                case LABELS.PROXYSCANIO:
+                case LABELS.PROXYSCANIO: {
                     const prxArr = JSON.parse(Buffer.from(body).toString()) as { Ip: string; Port: number }[];
                     const proxyScanPrx = prxArr.map(({ Ip, Port }) => {
                         return {
@@ -106,27 +109,31 @@ Apify.main(async () => {
 
                     addProxiesToStore(Store, proxyScanPrx);
                     break;
+                }
 
-                case LABELS.VPNOVERVIEW:
+                case LABELS.VPNOVERVIEW: {
                     const new$ = cheerio.load(body);
                     const vpnOverviewPrx = getProxiesFromTable(new$, 'table tbody > tr');
 
                     addProxiesToStore(Store, vpnOverviewPrx);
                     break;
+                }
 
-                case LABELS.HIDEMYNAME:
+                case LABELS.HIDEMYNAME: {
                     const hideMyNamePrx = getProxiesFromTable($, '.table_block table tbody > tr');
 
                     addProxiesToStore(Store, hideMyNamePrx);
                     break;
+                }
 
-                case LABELS.PROXYNOVA:
+                case LABELS.PROXYNOVA: {
                     const proxyNovaPrx = getProxiesFromSneakyTable($, '#tbl_proxy_list tbody tr');
 
                     addProxiesToStore(Store, proxyNovaPrx);
                     break;
+                }
 
-                case LABELS.FREEPROXYLISTCOM:
+                case LABELS.FREEPROXYLISTCOM: {
                     const rows = $('.proxy-list tbody > tr');
                     if (!rows.length) return;
 
@@ -144,14 +151,16 @@ Apify.main(async () => {
                     }
 
                     break;
+                }
 
-                case LABELS.ANONYMOUSE:
+                case LABELS.ANONYMOUSE: {
                     const anonymouseProxies = getProxiesFromTable($, 'table tbody > tr.text');
 
                     addProxiesToStore(Store, anonymouseProxies);
                     break;
+                }
 
-                case LABELS.CODERDUCK:
+                case LABELS.CODERDUCK: {
                     let coderDuckProxies = getProxiesFromTable($, '.table tbody > tr', 1, 2);
                     coderDuckProxies = coderDuckProxies.map(<T extends ProxySchema>({ host, port, full }: T) => {
                         return {
@@ -162,8 +171,9 @@ Apify.main(async () => {
                     });
                     addProxiesToStore(Store, coderDuckProxies);
                     break;
+                }
 
-                case LABELS.PROXYFINDER:
+                case LABELS.PROXYFINDER: {
                     const { records } = json || {};
 
                     const onlineProxies = records.filter((proxy: { online: string }) => {
@@ -178,11 +188,12 @@ Apify.main(async () => {
                                 port: +port as number,
                                 full: `${ip}:${port}` as string,
                             };
-                        })
+                        }),
                     );
                     break;
+                }
 
-                case LABELS.PUBPROXY:
+                case LABELS.PUBPROXY: {
                     const pubData: [] = json?.data || [];
 
                     if (!pubData.length) break;
@@ -196,8 +207,9 @@ Apify.main(async () => {
                     });
                     addProxiesToStore(Store, pubProxyPrx);
                     break;
+                }
 
-                case LABELS.PROXYLISTDOWNLOAD:
+                case LABELS.PROXYLISTDOWNLOAD: {
                     const bufferString = Buffer.from(body).toString();
                     const array: string[] = bufferString.split('\r\n');
                     array.pop();
@@ -214,6 +226,7 @@ Apify.main(async () => {
                     });
 
                     addProxiesToStore(Store, proxyListDownloadPrx);
+                }
             }
         },
     });
